@@ -1,0 +1,13 @@
+{
+  "base_url": "https://raw.githubusercontent.com/itsfizys/piccdn/main",
+  "total_images": 7000,
+  "categories": {
+    "girls": 1000,
+    "boys": 1000,
+    "anime": 1000,
+    "couples": 1000,
+    "banners": 1000,
+    "wallpapers": 1000,
+    "server-icons": 1000
+  }
+}
