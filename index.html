@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>pic-cdn · curated image library</title>
+  <meta name="description" content="7,000 hand-picked profile pictures, banners, wallpapers and server icons — served via GitHub Raw CDN. No API key. No rate limits.">
+  <style>
+    /* ---------- RESET & GLOBAL ---------- */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #0b1b2f;
+      --text-muted: #475569;
+      --border: #e2e8f0;
+      --accent: #3b82f6;
+      --accent-soft: #eff6ff;
+      --accent-hover: #2563eb;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.03);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.08), 0 4px 10px rgba(0, 0, 0, 0.04);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+      --max-width: 1280px;
+      --header-height: 64px;
+      --transition: 0.2s cubic-bezier(0.2, 0, 0, 1);
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0b1120;
+        --surface: #111827;
+        --text: #f1f5f9;
+        --text-muted: #94a3b8;
+        --border: #1e293b;
+        --accent: #60a5fa;
+        --accent-soft: #1e293b;
+        --accent-hover: #93bbfd;
+        --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+        --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+        --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.5);
+      }
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+    a:hover {
+      color: var(--accent-hover);
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: inherit;
+    }
+
+    /* ---------- UTILITY ---------- */
+    .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 clamp(1rem, 4vw, 2.5rem);
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* ---------- HEADER ---------- */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: var(--header-height);
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+    @media (prefers-color-scheme: dark) {
+      .site-header {
+        background: rgba(17, 24, 39, 0.72);
+      }
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+      gap: 1rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--accent), #8b5cf6);
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 800;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .github-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.5rem 0.9rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      transition: all var(--transition);
+      text-decoration: none;
+    }
+    .github-link:hover {
+      color: var(--text);
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+    .github-link svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 480px) {
+      .github-link span { display: none; }
+      .github-link { padding: 0.5rem; border-radius: 50%; width: 40px; height: 40px; justify-content: center; }
+    }
+
+    /* ---------- HERO ---------- */
+    .hero {
+      padding: clamp(2.5rem, 8vw, 4.5rem) 0 clamp(2rem, 6vw, 3.5rem);
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.9rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border-radius: 100px;
+      margin-bottom: 1.25rem;
+      border: 1px solid rgba(59, 130, 246, 0.15);
+    }
+    .hero-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 6vw, 3.75rem);
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, var(--text) 40%, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      color: var(--text-muted);
+      max-width: 640px;
+      margin: 0 auto 1.75rem;
+      line-height: 1.7;
+    }
+
+    .hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: clamp(1rem, 4vw, 2.5rem);
+      margin-bottom: 2rem;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat-value {
+      font-size: clamp(1.4rem, 3.5vw, 2rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      line-height: 1.2;
+    }
+    .stat-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-top: 0.15rem;
+    }
+
+    /* ---------- SEARCH / FILTER ---------- */
+    .toolbar {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding: 1.25rem;
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .search-wrap {
+      position: relative;
+      width: 100%;
+    }
+    .search-wrap .search-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+    .search-input {
+      width: 100%;
+      padding: 0.85rem 1rem 0.85rem 2.75rem;
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition), background 0.3s ease;
+    }
+    .search-input::placeholder {
+      color: var(--text-muted);
+      opacity: 0.7;
+    }
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+
+    .filter-scroll {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding-bottom: 0.25rem;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .filter-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter-chip {
+      flex-shrink: 0;
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+    .filter-chip:hover {
+      color: var(--text);
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+    .filter-chip.active {
+      color: #fff;
+      background: var(--accent);
+      border-color: var(--accent);
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+    }
+
+    /* ---------- GALLERY ---------- */
+    .gallery-section {
+      padding-bottom: 3rem;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .section-head h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .result-count {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(clamp(140px, 30vw, 200px), 1fr));
+      gap: clamp(0.75rem, 2.5vw, 1.25rem);
+    }
+
+    .card {
+      position: relative;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+      cursor: pointer;
+      group: card;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--accent);
+    }
+
+    .card-img-wrap {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      background: var(--bg);
+    }
+    .card-img-wrap.banner {
+      aspect-ratio: 3 / 1;
+    }
+    .card-img-wrap.wallpaper {
+      aspect-ratio: 16 / 9;
+    }
+
+    .card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.45s cubic-bezier(0.2, 0, 0, 1), opacity 0.3s ease;
+      opacity: 0;
+    }
+    .card-img.loaded {
+      opacity: 1;
+    }
+    .card:hover .card-img {
+      transform: scale(1.06);
+    }
+
+    .card-skeleton {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, var(--border) 25%, transparent 50%, var(--border) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.65) 0%, transparent 55%);
+      opacity: 0;
+      transition: opacity var(--transition);
+      display: flex;
+      align-items: flex-end;
+      padding: 0.75rem;
+    }
+    .card:hover .card-overlay {
+      opacity: 1;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 0.4rem;
+      width: 100%;
+    }
+    .card-btn {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      padding: 0.5rem 0.6rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: var(--radius-sm);
+      transition: background var(--transition), transform var(--transition);
+      text-decoration: none;
+    }
+    .card-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      color: #fff;
+    }
+    .card-btn:active {
+      transform: scale(0.96);
+    }
+    .card-btn svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    .card-info {
+      padding: 0.6rem 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    .card-category {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 0.15rem 0.55rem;
+      border-radius: 100px;
+    }
+    .card-id {
+      font-size: 0.7rem;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+    }
+
+    /* ---------- EMPTY / ERROR ---------- */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 1rem;
+      color: var(--text-muted);
+    }
+    .empty-state svg {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 1rem;
+      opacity: 0.4;
+    }
+    .empty-state p {
+      font-size: 0.95rem;
+    }
+
+    /* ---------- COPY TOAST ---------- */
+    .toast {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(120%);
+      background: #1e293b;
+      color: #fff;
+      padding: 0.75rem 1.25rem;
+      border-radius: 100px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      box-shadow: var(--shadow-lg);
+      z-index: 1000;
+      transition: transform 0.35s cubic-bezier(0.2, 0, 0, 1);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      pointer-events: none;
+      max-width: 90vw;
+    }
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+    .toast svg {
+      width: 16px;
+      height: 16px;
+      color: #4ade80;
+      flex-shrink: 0;
+    }
+
+    /* ---------- FOOTER ---------- */
+    .site-footer {
+      margin-top: auto;
+      border-top: 1px solid var(--border);
+      padding: 2rem 0;
+      background: var(--surface);
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+    .footer-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      text-align: center;
+    }
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem 1.5rem;
+      font-size: 0.85rem;
+    }
+    .footer-links a {
+      color: var(--text-muted);
+      font-weight: 500;
+      transition: color var(--transition);
+    }
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+    .footer-copy {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* ---------- SCROLL TOP ---------- */
+    .scroll-top {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
+      display: grid;
+      place-items: center;
+      color: var(--text-muted);
+      z-index: 90;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(12px);
+      transition: all var(--transition);
+    }
+    .scroll-top.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .scroll-top:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+    .scroll-top svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* ---------- RESPONSIVE FINE-TUNING ---------- */
+    @media (max-width: 640px) {
+      .toolbar {
+        padding: 1rem;
+        border-radius: var(--radius-md);
+      }
+      .hero {
+        padding-top: 2rem;
+      }
+      .card-info {
+        padding: 0.5rem 0.6rem;
+      }
+      .scroll-top {
+        bottom: 1rem;
+        right: 1rem;
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .toolbar {
+        flex-direction: row;
+        align-items: center;
+      }
+      .search-wrap {
+        flex: 1;
+        min-width: 220px;
+      }
+      .filter-scroll {
+        flex: 2;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        overflow-x: visible;
+      }
+    }
+
+    /* ---------- REDUCED MOTION ---------- */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== HEADER ========== -->
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a href="#" class="logo" aria-label="pic-cdn home">
+        <span class="logo-icon" aria-hidden="true">P</span>
+        <span>pic-cdn</span>
+      </a>
+      <div class="header-actions">
+        <a
+          href="https://github.com/faisaljs/pic-cdn"
+          class="github-link"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="View on GitHub"
+        >
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+          <span>GitHub</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========== MAIN ========== -->
+  <main role="main">
+
+    <!-- HERO -->
+    <section class="hero container" aria-labelledby="hero-title">
+      <div class="hero-badge">
+        <span class="dot" aria-hidden="true"></span>
+        7,000 curated images
+      </div>
+      <h1 id="hero-title">Your image library,<br>always online.</h1>
+      <p>
+        Hand-picked profile pictures, banners, wallpapers and server icons —
+        served straight from GitHub's Raw CDN. No API key, no rate limits,
+        no downtime. Just fetch a URL.
+      </p>
+      <div class="hero-stats" role="list" aria-label="Key statistics">
+        <div class="stat" role="listitem">
+          <div class="stat-value" id="stat-total">7,000</div>
+          <div class="stat-label">Images</div>
+        </div>
+        <div class="stat" role="listitem">
+          <div class="stat-value">7</div>
+          <div class="stat-label">Categories</div>
+        </div>
+        <div class="stat" role="listitem">
+          <div class="stat-value">∞</div>
+          <div class="stat-label">Requests</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALLERY SECTION -->
+    <section class="gallery-section container" aria-labelledby="gallery-title">
+
+      <!-- TOOLBAR -->
+      <div class="toolbar" role="search">
+        <div class="search-wrap">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input
+            type="search"
+            id="searchInput"
+            class="search-input"
+            placeholder="Search by category or ID…"
+            aria-label="Search images by category or ID"
+            autocomplete="off"
+            spellcheck="false"
+          >
+        </div>
+        <div class="filter-scroll" role="group" aria-label="Filter by category">
+          <button class="filter-chip active" data-category="all">All</button>
+          <button class="filter-chip" data-category="girls">Girls</button>
+          <button class="filter-chip" data-category="boys">Boys</button>
+          <button class="filter-chip" data-category="anime">Anime</button>
+          <button class="filter-chip" data-category="couples">Couples</button>
+          <button class="filter-chip" data-category="banners">Banners</button>
+          <button class="filter-chip" data-category="wallpapers">Wallpapers</button>
+          <button class="filter-chip" data-category="server-icons">Icons</button>
+        </div>
+      </div>
+
+      <!-- SECTION HEAD -->
+      <div class="section-head">
+        <h2 id="gallery-title">Gallery</h2>
+        <span class="result-count" id="resultCount" aria-live="polite"></span>
+      </div>
+
+      <!-- GRID -->
+      <div
+        class="gallery-grid"
+        id="galleryGrid"
+        role="list"
+        aria-label="Image gallery"
+      ></div>
+
+      <!-- EMPTY STATE (hidden by default) -->
+      <div class="empty-state" id="emptyState" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <p>No images match your search. Try a different keyword or category.</p>
+      </div>
+
+      <!-- LOAD MORE (if needed for very large result sets) -->
+      <div style="text-align:center; margin-top:2rem;">
+        <button id="loadMoreBtn" class="filter-chip" style="padding:0.7rem 2rem; font-size:0.9rem;" hidden>
+          Load more
+        </button>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-links">
+        <a href="https://github.com/faisaljs/pic-cdn" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+        <a href="https://raw.githubusercontent.com/faisaljs/pic-cdn/main/index.json" target="_blank" rel="noopener noreferrer">index.json</a>
+        <a href="https://www.npmjs.com/package/piccdn" target="_blank" rel="noopener noreferrer">npm package</a>
+      </div>
+      <p class="footer-copy">
+        MIT © 2026 faisal · Built with ❤️ for the open web
+      </p>
+    </div>
+  </footer>
+
+  <!-- ========== SCROLL TOP ========== -->
+  <button class="scroll-top" id="scrollTopBtn" aria-label="Scroll to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
+  <!-- ========== TOAST ========== -->
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+    <span id="toastMessage">Copied to clipboard</span>
+  </div>
+
+  <!-- ========== SCRIPTS ========== -->
+  <script>
+    (function () {
+      'use strict';
+
+      // ---------- CONFIG ----------
+      const BASE_URL = 'https://raw.githubusercontent.com/faisaljs/pic-cdn/main';
+      const CATEGORIES = ['girls', 'boys', 'anime', 'couples', 'banners', 'wallpapers', 'server-icons'];
+      const PER_CATEGORY = 1000;
+      const TOTAL_IMAGES = CATEGORIES.length * PER_CATEGORY;
+      const INITIAL_BATCH = 36;      // images shown initially
+      const BATCH_SIZE = 36;         // images added per "load more"
+      const MAX_RENDERED = 144;      // hard cap for smooth performance
+
+      // aspect ratio class per category
+      const ASPECT_CLASS = {
+        banners: 'banner',
+        wallpapers: 'wallpaper',
+      };
+
+      // ---------- STATE ----------
+      let allItems = [];             // full generated list
+      let filteredItems = [];        // after search/filter
+      let activeCategory = 'all';
+      let searchTerm = '';
+      let visibleCount = INITIAL_BATCH;
+
+      // ---------- DOM REFS ----------
+      const grid = document.getElementById('galleryGrid');
+      const emptyState = document.getElementById('emptyState');
+      const resultCount = document.getElementById('resultCount');
+      const searchInput = document.getElementById('searchInput');
+      const filterChips = document.querySelectorAll('.filter-chip[data-category]');
+      const loadMoreBtn = document.getElementById('loadMoreBtn');
+      const scrollTopBtn = document.getElementById('scrollTopBtn');
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toastMessage');
+
+      // ---------- DATA GENERATION ----------
+      function buildDataset() {
+        const items = [];
+        for (const cat of CATEGORIES) {
+          for (let i = 0; i < PER_CATEGORY; i++) {
+            items.push({
+              id: `${cat}-${i}`,
+              category: cat,
+              index: i,
+              url: `${BASE_URL}/${cat}/${i}.jpg`,
+            });
+          }
+        }
+        return items;
+      }
+
+      // ---------- FILTERING ----------
+      function applyFilters() {
+        const term = searchTerm.trim().toLowerCase();
+
+        filteredItems = allItems.filter((item) => {
+          // category filter
+          if (activeCategory !== 'all' && item.category !== activeCategory) {
+            return false;
+          }
+          // search term
+          if (term) {
+            const inCategory = item.category.toLowerCase().includes(term);
+            const inId = item.id.toLowerCase().includes(term);
+            const inIndex = String(item.index).includes(term);
+            return inCategory || inId || inIndex;
+          }
+          return true;
+        });
+
+        // reset visible count when filters change
+        visibleCount = INITIAL_BATCH;
+        render();
+      }
+
+      // ---------- RENDER ----------
+      function render() {
+        const total = filteredItems.length;
+
+        // update count
+        resultCount.textContent = total === 0
+          ? 'No results'
+          : `Showing ${Math.min(visibleCount, total)} of ${total} image${total !== 1 ? 's' : ''}`;
+
+        // toggle empty state
+        if (total === 0) {
+          grid.innerHTML = '';
+          emptyState.hidden = false;
+          loadMoreBtn.hidden = true;
+          return;
+        }
+        emptyState.hidden = true;
+
+        // slice for rendering
+        const slice = filteredItems.slice(0, visibleCount);
+
+        // build HTML
+        const fragment = document.createDocumentFragment();
+        slice.forEach((item) => {
+          fragment.appendChild(createCard(item));
+        });
+
+        grid.innerHTML = '';
+        grid.appendChild(fragment);
+
+        // load more button visibility
+        loadMoreBtn.hidden = visibleCount >= total;
+      }
+
+      // ---------- CARD CREATION ----------
+      function createCard(item) {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.setAttribute('role', 'listitem');
+        card.dataset.category = item.category;
+        card.dataset.id = item.id;
+
+        const imgWrap = document.createElement('div');
+        imgWrap.className = 'card-img-wrap';
+        const extraClass = ASPECT_CLASS[item.category];
+        if (extraClass) imgWrap.classList.add(extraClass);
+
+        // skeleton
+        const skeleton = document.createElement('div');
+        skeleton.className = 'card-skeleton';
+        imgWrap.appendChild(skeleton);
+
+        // image
+        const img = document.createElement('img');
+        img.className = 'card-img';
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        img.alt = `${item.category} image ${item.index}`;
+        img.src = item.url;
+
+        // image load handlers
+        img.addEventListener('load', () => {
+          img.classList.add('loaded');
+          skeleton.remove();
+        });
+        img.addEventListener('error', () => {
+          // fallback: remove skeleton, show placeholder
+          skeleton.remove();
+          img.alt = 'Image unavailable';
+          img.style.background = 'var(--border)';
+          // remove the broken image icon
+          img.style.display = 'none';
+          const fallback = document.createElement('div');
+          fallback.style.cssText = 'width:100%;height:100%;display:grid;place-items:center;color:var(--text-muted);font-size:0.75rem;font-weight:600;background:var(--bg);';
+          fallback.textContent = 'Not found';
+          imgWrap.appendChild(fallback);
+        });
+
+        imgWrap.appendChild(img);
+
+        // overlay with actions
+        const overlay = document.createElement('div');
+        overlay.className = 'card-overlay';
+
+        const actions = document.createElement('div');
+        actions.className = 'card-actions';
+
+        // copy URL button
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'card-btn';
+        copyBtn.type = 'button';
+        copyBtn.setAttribute('aria-label', `Copy URL for ${item.category} image ${item.index}`);
+        copyBtn.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          Copy
+        `;
+        copyBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          copyToClipboard(item.url);
+        });
+
+        // open button
+        const openLink = document.createElement('a');
+        openLink.className = 'card-btn';
+        openLink.href = item.url;
+        openLink.target = '_blank';
+        openLink.rel = 'noopener noreferrer';
+        openLink.setAttribute('aria-label', `Open ${item.category} image ${item.index} in new tab`);
+        openLink.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+          Open
+        `;
+        openLink.addEventListener('click', (e) => e.stopPropagation());
+
+        actions.appendChild(copyBtn);
+        actions.appendChild(openLink);
+        overlay.appendChild(actions);
+        imgWrap.appendChild(overlay);
+
+        // card info bar
+        const info = document.createElement('div');
+        info.className = 'card-info';
+
+        const catLabel = document.createElement('span');
+        catLabel.className = 'card-category';
+        catLabel.textContent = item.category;
+
+        const idLabel = document.createElement('span');
+        idLabel.className = 'card-id';
+        idLabel.textContent = `#${item.index}`;
+
+        info.appendChild(catLabel);
+        info.appendChild(idLabel);
+
+        // assemble card
+        card.appendChild(imgWrap);
+        card.appendChild(info);
+
+        return card;
+      }
+
+      // ---------- COPY TO CLIPBOARD ----------
+      async function copyToClipboard(text) {
+        try {
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(text);
+            showToast('URL copied to clipboard');
+          } else {
+            // fallback for older browsers / non-https
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showToast('URL copied to clipboard');
+          }
+        } catch (err) {
+          showToast('Failed to copy — try manually');
+        }
+      }
+
+      // ---------- TOAST ----------
+      let toastTimer = null;
+      function showToast(message) {
+        toastMessage.textContent = message;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          toast.classList.remove('show');
+        }, 2200);
+      }
+
+      // ---------- LOAD MORE ----------
+      function loadMore() {
+        const total = filteredItems.length;
+        if (visibleCount >= total) return;
+
+        // append next batch without re-rendering everything
+        const start = visibleCount;
+        const end = Math.min(visibleCount + BATCH_SIZE, total, MAX_RENDERED);
+        const fragment = document.createDocumentFragment();
+
+        for (let i = start; i < end; i++) {
+          fragment.appendChild(createCard(filteredItems[i]));
+        }
+
+        // remove any existing "load more" ghost? no, we just append to grid
+        // But we previously replaced grid innerHTML in render().
+        // For load-more, we need to append instead of re-render.
+        // The render() function does full replace. So loadMore should use its own append.
+        grid.appendChild(fragment);
+
+        visibleCount = end;
+
+        // update count
+        resultCount.textContent = `Showing ${visibleCount} of ${total} image${total !== 1 ? 's' : ''}`;
+        loadMoreBtn.hidden = visibleCount >= total || visibleCount >= MAX_RENDERED;
+
+        if (visibleCount >= MAX_RENDERED && total > MAX_RENDERED) {
+          loadMoreBtn.hidden = true;
+          // optional: could show a note
+        }
+      }
+
+      // ---------- SCROLL TOP ----------
+      function handleScroll() {
+        if (window.scrollY > 400) {
+          scrollTopBtn.classList.add('visible');
+        } else {
+          scrollTopBtn.classList.remove('visible');
+        }
+      }
+
+      // ---------- DEBOUNCE ----------
+      function debounce(fn, delay) {
+        let timer;
+        return function (...args) {
+          clearTimeout(timer);
+          timer = setTimeout(() => fn.apply(this, args), delay);
+        };
+      }
+
+      // ---------- EVENT LISTENERS ----------
+
+      // search
+      const debouncedSearch = debounce((value) => {
+        searchTerm = value;
+        applyFilters();
+      }, 250);
+
+      searchInput.addEventListener('input', (e) => {
+        debouncedSearch(e.target.value);
+      });
+
+      // filter chips
+      filterChips.forEach((chip) => {
+        chip.addEventListener('click', () => {
+          filterChips.forEach((c) => c.classList.remove('active'));
+          chip.classList.add('active');
+          activeCategory = chip.dataset.category;
+          applyFilters();
+        });
+      });
+
+      // load more
+      loadMoreBtn.addEventListener('click', loadMore);
+
+      // scroll top
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      scrollTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // ---------- INIT ----------
+      function init() {
+        allItems = buildDataset();
+        filteredItems = allItems.slice(); // start with all
+        visibleCount = INITIAL_BATCH;
+
+        // set total stat
+        document.getElementById('stat-total').textContent =
+          TOTAL_IMAGES.toLocaleString();
+
+        render();
+        handleScroll();
+      }
+
+      // start when DOM ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+
+    })();
+  </script>
+</body>
+</html>
